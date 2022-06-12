@@ -3,16 +3,20 @@ class Solution {
         
         int max = 0;
         int curSum = 0;
+        int i = 0, j = 0;
         
-        Set<Integer> visited = new HashSet<>();
-        for(int i = 0, j = 0; i < nums.length && j < nums.length;) {
-            if(!visited.contains(nums[j])) {
+        boolean[] visited = new boolean[10001];
+        while(j < nums.length) {
+            while( j < nums.length && !visited[ nums[j] ] ) {
                 curSum += nums[j];
-                max = Math.max(curSum, max);
-                visited.add(nums[j++]);
-            } else {
+                visited[ nums[j++] ] = true;
+            } 
+            
+            max = Math.max(curSum, max);
+            
+            while( j < nums.length && visited[nums[j]]) {
                 curSum -= nums[i];
-                visited.remove(nums[i++]);
+                visited[ nums[i++] ] = false;
             }
         }
         
