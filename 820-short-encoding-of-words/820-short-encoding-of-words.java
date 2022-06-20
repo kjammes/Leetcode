@@ -1,18 +1,45 @@
 class Solution {
     public int minimumLengthEncoding(String[] words) {
-        Set<String> set = new HashSet<>(Arrays.asList(words));
-        for(String word: words) {
-            for(int i = 1; i < word.length(); i++) {
-                set.remove(word.substring(i));
+        Trie root = new Trie();
+        root.next = new Trie[26];
+        
+        int length = 0;
+        for(String s: words) {
+            length += helper(s, root);
+        }
+        
+        return length;
+    }
+    
+    private int helper(String s, Trie node) {
+        boolean newBranch = false;
+        int create = 0;
+        for(int i = s.length() - 1; i >= 0; i--) {
+            boolean newLevel = false;
+            int id = s.charAt(i) - 'a';
+            
+            if(node.next == null) {
+                newLevel = true;
+                node.next = new Trie[26];
             }
+            
+            if(node.next[id] == null) {
+                if(newLevel == false)
+                    newBranch = true;
+                
+                node.next[id] = new Trie();
+                create++;
+            }
+            
+            node = node.next[id];
         }
         
-        int result = 0;
-        for(String s: set) {
-            result += s.length() + 1;
-        }
-        
-        return result;
+        return newBranch ? s.length() + 1: create;
+    }
+    
+    
+    class Trie {
+        Trie[] next = null;
     }
     
 }
