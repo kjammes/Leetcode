@@ -1,14 +1,18 @@
 class Solution {
     public int minimumLengthEncoding(String[] words) {
-        Arrays.sort(words, (a, b) -> b.length() - a.length());
-        StringBuilder sb = new StringBuilder();
-        for(String s: words) {
-            if(sb.indexOf(s + '#') == -1) {
-                sb.append(s + '#');
+        Set<String> set = new HashSet<>(Arrays.asList(words));
+        for(String word: words) {
+            for(int i = 1; i < word.length(); i++) {
+                set.remove(word.substring(i));
             }
         }
         
-        return sb.length();
+        int result = 0;
+        for(String s: set) {
+            result += s.length() + 1;
+        }
+        
+        return result;
     }
     
 }
