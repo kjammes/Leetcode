@@ -14,9 +14,7 @@ class Solution {
 		    if(sum - curr == 1) return true;
 
 		    int x = curr % (sum - curr);
-            System.out.println("x("+ x +") = curr("+ curr +") % (sum("+ sum +") - curr("+ curr +"))");
 		    sum = sum - curr + x;
-            System.out.println("sum = " + sum);
 
 		    if (x == 0 || x == curr) return false;
 		    else maxHeap.add(x);
