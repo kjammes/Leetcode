@@ -9,13 +9,13 @@ class Solution {
             } else {
                 int a = stack.pop(), b = stack.pop();
                 int result = switch (token) {
-    case "+" -> b + a;
-    case "-" -> b - a;
-    case "*" -> a * b;
-    case "/" -> b / a;
-    default -> throw new IllegalArgumentException("Invalid operator: " + token);
-};
-stack.push(result);
+                    case "+" -> b + a;
+                    case "-" -> b - a;
+                    case "*" -> a * b;
+                    case "/" -> b / a;
+                    default  -> 0;
+                };
+                stack.push(result);
             }
         }
         
