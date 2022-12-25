@@ -1,23 +1,35 @@
 class Solution {
     public int[] answerQueries(int[] nums, int[] queries) {
-        int[] result = new int[queries.length];
+        
+        int m = queries.length;
+        
+        int[] result = new int[m];
         Arrays.sort(nums);
-        for(int i = 0; i < queries.length; i++) {
-            result[i] = longestCount(queries[i], nums);
+        
+        for(int i = 1; i < nums.length; i++) {
+            nums[i] += nums[i-1];
+        }
+        
+        for(int i = 0; i < m; i++) {
+            result[i] = bs(nums, queries[i]);
         }
         return result;
     }
     
-    private int longestCount(int sum, int[] nums) {
-        int curSum = 0;
+    private int bs(int[] nums, int query) {
+        int low = 0, high = nums.length - 1;
         int result = 0;
-        for(int num: nums) {
-            if(curSum + num <= sum) {
-                curSum += num;
-                result++;
+        while(low <= high) {
+            int mid = low + (high - low) / 2;
+            if(nums[mid] == query) {
+                result = mid + 1;
+                break;
+            } else if(nums[mid] < query) {
+                result = mid + 1;
+                low = mid + 1;
+            } else {
+                high = mid - 1;
             }
-            
-            if(curSum >= sum) return result;
         }
         return result;
     }
