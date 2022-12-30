@@ -22,17 +22,19 @@ class Solution {
         int taskIdx = 0;
         int curTime= 0;
 
-        while(ansIdx < n){
-            while(taskIdx < n && arr[taskIdx].enqueueTime <= curTime){
+        while(ansIdx < n) {
+            while(taskIdx < n && arr[taskIdx].enqueueTime <= curTime) {
                 p.offer(arr[taskIdx++]);
             }
-            if(p.isEmpty()){
+            
+            if(p.isEmpty()) {
                 curTime = arr[taskIdx].enqueueTime;
-            }else{
+            } else {
                 curTime += p.peek().processingTime;
                 ans[ansIdx++] = p.poll().idx;
             }
         }
+        
         return ans;       
     }
     
