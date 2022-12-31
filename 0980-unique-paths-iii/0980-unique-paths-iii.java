@@ -1,5 +1,8 @@
-class Solution {
-    
+class Solution {    
+    /**
+    *
+    *
+    */
     private final int STARTING_SQUARE = 1;
     private final int ENDING_SQUARE = 2;
     private final int CAN_WALK = 0;
@@ -38,7 +41,7 @@ class Solution {
                    + dfs(grid, x, y + 1, zeroCount) + dfs(grid, x, y - 1, zeroCount);
         
         grid[x][y] = 0;
-        zeroCount++;
+        // zeroCount++;
         
         return result;
     }
