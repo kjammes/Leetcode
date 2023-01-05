@@ -1,7 +1,6 @@
 class Solution {
     public int findMinArrowShots(int[][] points) {
         Arrays.sort(points, Comparator.comparingInt(a -> a[1]));
-        System.out.println(Arrays.deepToString(points));
         
         int result = 1;
         
