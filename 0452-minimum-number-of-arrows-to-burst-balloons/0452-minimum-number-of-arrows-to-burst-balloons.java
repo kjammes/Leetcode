@@ -10,8 +10,6 @@ class Solution {
         while(!pQ.isEmpty()) {
             int[] prev = pQ.poll();
             
-            System.out.println(prev[0] + " " + prev[1]);
-            
             while(!pQ.isEmpty() && pQ.peek()[0] <= prev[1] && prev[1] <= pQ.peek()[1] ) { pQ.poll(); }
             
             result++;
