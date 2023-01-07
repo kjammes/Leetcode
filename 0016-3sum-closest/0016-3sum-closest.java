@@ -6,7 +6,7 @@ class Solution {
         for (int i = 0; i < nums.length - 2; i++) {
             int l= i + 1;
             int h= nums.length-1;
-            while(l<h-1+1) {
+            while(l<h) {
                 int s= nums[i] + nums[l]+nums[h];
                 if (s==target) {
                     return s;
