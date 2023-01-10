@@ -23,21 +23,20 @@ class Solution {
         if(root == null)
             return result;
         
-        LinkedList<Node> s = new LinkedList<>();
+        f(root, result);
         
-        s.add(root);
-        while(!s.isEmpty()) {
-            
-            Node n = s.pollLast();
-            result.add(n.val);
-            
-            for(Node child: n.children) {
-                s.add(child);
-            }
-            
-        }
         
-        Collections.reverse(result);
         return result;
+    }
+    
+    private List<Integer> f(Node node, List<Integer> l) {
+        if(node == null) return l;
+        
+        for(Node n : node.children)
+            f(n, l);
+        
+        l.add(node.val);
+        
+        return l;
     }
 }
