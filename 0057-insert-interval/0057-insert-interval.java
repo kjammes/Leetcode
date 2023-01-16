@@ -1,30 +1,30 @@
 class Solution {
     public int[][] insert(int[][] intervals, int[] newInterval) {
-        List<List<Integer>> res = new ArrayList<>();
-        
-        for(int[] interval: intervals) {
-            int low = interval[0];
-            int high = interval[1];
-            
-            int newLow = newInterval[0];
-            int newHigh = newInterval[1];
-            
-            if (high < newLow) {
-                res.add(Arrays.asList(low, high));
-            } else if (newHigh < low) {
-                res.add(Arrays.asList(newLow, newHigh));
-                newInterval[0] = low;
-                newInterval[1] = high;
-            } else {
-                newInterval[0] = Math.min(low, newLow);
-                newInterval[1] = Math.max(high, newHigh);
-            }
-        }
-        
-        res.add(Arrays.asList(newInterval[0], newInterval[1]));
-        
-        return res.stream()
-            .map(l -> l.stream().mapToInt(Integer::intValue).toArray())
-            .toArray(int[][]::new);
+		List<int[]> result = new LinkedList<>();
+	    int i = 0;
+	    // add all the intervals ending before newInterval starts
+	    while (i < intervals.length && intervals[i][1] < newInterval[0]){
+	        result.add(intervals[i]);
+	        i++;
+	    }
+	    
+	    // merge all overlapping intervals to one considering newInterval
+	    while (i < intervals.length && intervals[i][0] <= newInterval[1]) {
+	    	// we could mutate newInterval here also
+	        newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
+	        newInterval[1] = Math.max(newInterval[1], intervals[i][1]);
+	        i++;
+	    }
+	    
+	    // add the union of intervals we got
+	    result.add(newInterval); 
+	    
+	    // add all the rest
+	    while (i < intervals.length){
+	    	result.add(intervals[i]); 
+	    	i++;
+	    }
+	    
+	    return result.toArray(new int[result.size()][]);
     }
 }
