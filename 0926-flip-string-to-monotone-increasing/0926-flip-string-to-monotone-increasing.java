@@ -1,23 +1,15 @@
 class Solution {
     public int minFlipsMonoIncr(String s) {
-        int zeros = 0;
-        int ones  = 0;
+        int noOfFlips = 0, ans = 0;
         
-        for (char c: s.toCharArray()) {
-            if (c == '0')
-                zeros++;
-        }
-        
-        int result = zeros;
         for(char c: s.toCharArray()) {
             if (c == '0') {
-                zeros--;
+                ans = Math.min(noOfFlips, ans + 1);
             } else {
-                ones++;
+                noOfFlips++;
             }
-            result = Math.min(result, zeros + ones);
         }
         
-        return result;
+        return ans;
     }
 }
