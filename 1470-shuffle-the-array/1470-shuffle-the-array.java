@@ -1,16 +1,20 @@
 class Solution {
     public int[] shuffle(int[] nums, int n) {
-        if (nums.length <= 2)
-            return nums;
-        
-        int[] res = new int[2*n];
-        int p1 = 0, p2 = n;
-        int resP = 0;
-        while (p1 < n && p2 < 2*n ) {
-            res[resP++] = nums[p1++];
-            res[resP++] = nums[p2++];
+        for (int i = n; i < 2*n; i++) {
+            int secNum = nums[i] << 10;
+            nums[i - n] = nums[i - n] | secNum;
         }
         
-        return res;
+        int tenOnes = (int) Math.pow(2, 10) - 1;
+        
+        for (int i = n - 1; i >= 0; --i) {
+            int secNum = nums[i] >> 10;
+            int firstNum = nums[i] & tenOnes;
+            
+            nums[i * 2] = firstNum;
+            nums[i * 2 + 1] = secNum;
+        }
+        
+        return nums;
     }
 }
