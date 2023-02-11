@@ -1,38 +1,36 @@
 class Solution {
     public int maxDistance(int[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-        int x= n+m;
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(grid[i][j]==1){
-                    continue;
-                }  
-                int top=x;
-                int left=x;
-                if(i-1>=0) top=grid[i-1][j];
-                if(j-1>=0) left=grid[i][j-1];
-                grid[i][j]=Math.min(top,left)+1;
+        int n = grid.length;
+        Queue<int[]> q = new LinkedList<>();
+        for (int r = 0; r < n; r++) {
+            for(int c = 0; c < n; c++) {
+                if (grid[r][c] == 1)
+                    q.add(new int[] {r, c});
             }
-        }   
-        for(int i=m-1;i>=0;i--){
-            for(int j=n-1;j>=0;j--){
-                if(grid[i][j]==1) {
-                    continue;
-                }
-                int bottem=x;
-                int right=x;
-                if(i+1<m) bottem=grid[i+1][j];
-                if(j+1<n) right=grid[i][j+1];
-                grid[i][j]=Math.min(grid[i][j],Math.min(bottem,right)+1);
-            }
-        }      
-        int count=Integer.MIN_VALUE;
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                count=Math.max(count,grid[i][j]);
+        }
+        
+        int result = -1;
+        while (!q.isEmpty()) {
+            int[] rowCol = q.remove();
+            int row = rowCol[0];
+            int col = rowCol[1];
+            
+            result = grid[row][col];
+            
+            int[][] dirs = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} };
+            for(int[] dir: dirs) {
+                int x = row + dir[0], y = col + dir[1];
+                if (
+                    Math.min(x, y) >= 0 &&
+                    Math.max(x, y) < n &&
+                    grid[x][y] == 0
+                ) {
+                    q.add(new int[] {x, y});
+                    grid[x][y] = grid[row][col] + 1;
                 }
             }
-        return count-1==n+m+1||count-1==0 ? -1: count-1;
+        }
+        
+        return result > 1 ? result - 1 : -1;
     }
 }
