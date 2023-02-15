@@ -9,7 +9,6 @@ class Solution {
             result.add(curNum % 10);
             carry = curNum / 10;
         }
-        System.out.println(carry);
         while (k != 0) {
             int n = k % 10;
             k /= 10;
