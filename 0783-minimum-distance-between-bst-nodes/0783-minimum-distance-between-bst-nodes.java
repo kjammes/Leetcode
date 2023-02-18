@@ -14,19 +14,23 @@
  * }
  */
 class Solution {
-private int minNum = 100000, prev = -99999;
-    void minDIFF(TreeNode root){
-        if (root == null) return;
-        minDIFF(root.left);
-        int s = root.val-prev;
-        minNum = minNum<s ? minNum:s;
-        prev+=s;
-        minDIFF(root.right);
-        return;
+    public int minDiffInBST(TreeNode root) {
+        List<Integer> sortedList = new ArrayList<>();
+        dfs(root, sortedList);
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < sortedList.size() - 1; i++) {
+            min = Math.min(min, sortedList.get(i + 1) - sortedList.get(i));
+        }
+        return min;
     }
-
-public int minDiffInBST(TreeNode root) {
-        minDIFF(root);
-        return minNum;
+    
+    private void dfs(TreeNode node, List<Integer> list) {
+        if (node.left != null) {
+            dfs(node.left, list);
+        }
+        if (node != null)
+            list.add(node.val);
+        if (node.right != null)
+            dfs(node.right, list);
     }
 };
