@@ -1,7 +1,11 @@
 class Solution {
     public int shipWithinDays(int[] weights, int days) {
-        int l = Arrays.stream(weights).max().getAsInt();
-        int r = Arrays.stream(weights).sum();
+        int l = Integer.MIN_VALUE;
+        int r = 0;
+        for (int w: weights) {
+            l = Math.max(l, w);
+            r += w;
+        }
         int res = r;
         
         while (l <= r) {
