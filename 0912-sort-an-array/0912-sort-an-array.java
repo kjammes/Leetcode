@@ -1,38 +1,60 @@
 class Solution {
+    private static final int INSERTION_SORT_THRESHOLD = 10;
+
     public int[] sortArray(int[] nums) {
-        int len = nums.length;
-        
-        if (len == 1)
-            return nums;
-        
-        int[] left = Arrays.copyOfRange(nums, 0, len/2);
-        int[] right = Arrays.copyOfRange(nums, len/2, len);
-        
-        return merge(sortArray(left), sortArray(right));
+        mergeSort(nums, 0, nums.length - 1);
+        return nums;
     }
-    
-    private int[] merge(int[] left, int[] right) {
-        int[] res = new int[left.length + right.length];
-        
-        int p1 = 0, p2 = 0;
-        int resP = 0;
-        while (p1 < left.length && p2 < right.length) {
-            if (left[p1] < right[p2])
-                res[resP++] = left[p1++];
-            else
-                res[resP++] = right[p2++];
+
+    private void mergeSort(int[] nums, int left, int right) {
+        if (right - left < INSERTION_SORT_THRESHOLD) {
+            insertionSort(nums, left, right);
+            return;
         }
-        
-        while (p1 < left.length) {
-            res[resP++] = left[p1++];
-        }
-        
-        while (p2 < right.length) {
-            res[resP++] = right[p2++];
-        }
-        
-        return res;
+
+        int mid = (left + right) / 2;
+        mergeSort(nums, left, mid);
+        mergeSort(nums, mid + 1, right);
+        merge(nums, left, mid, right);
     }
-    
-    
+
+    private void merge(int[] nums, int left, int mid, int right) {
+        int[] temp = new int[right - left + 1];
+
+        int i = left;
+        int j = mid + 1;
+        int k = 0;
+
+        while (i <= mid && j <= right) {
+            if (nums[i] <= nums[j]) {
+                temp[k++] = nums[i++];
+            } else {
+                temp[k++] = nums[j++];
+            }
+        }
+
+        while (i <= mid) {
+            temp[k++] = nums[i++];
+        }
+
+        while (j <= right) {
+            temp[k++] = nums[j++];
+        }
+
+        System.arraycopy(temp, 0, nums, left, temp.length);
+    }
+
+    private void insertionSort(int[] nums, int left, int right) {
+        for (int i = left + 1; i <= right; i++) {
+            int key = nums[i];
+            int j = i - 1;
+
+            while (j >= left && nums[j] > key) {
+                nums[j + 1] = nums[j];
+                j--;
+            }
+
+            nums[j + 1] = key;
+        }
+    }
 }
