@@ -42,6 +42,17 @@ class Solution {
         }
 
         System.arraycopy(temp, 0, nums, left, temp.length);
+        
+        /**
+        public static void arraycopy(Object source_arr, int sourcePos,
+                            Object dest_arr, int destPos, int len)
+        Parameters : 
+        source_arr : array to be copied from
+        sourcePos : starting position in source array from where to copy
+        dest_arr : array to be copied in
+        destPos : starting position in destination array, where to copy in
+        len : total no. of components to be copied.
+        **/
     }
 
     private void insertionSort(int[] nums, int left, int right) {
