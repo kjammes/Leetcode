@@ -10,13 +10,11 @@ class Solution {
                 lastMin = (nums[i] == minK) ? i : lastMin;
                 lastMax = (nums[i] == maxK) ? i : lastMax;
                 count += Math.max(0, Math.min(lastMin, lastMax) - leftBound);
-                System.out.println(count);
             } else {
                 leftBound = i;
                 lastMin = -1;
                 lastMax = -1;
             }
-            System.out.println();
         }
         
         return count;
