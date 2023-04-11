@@ -1,22 +1,25 @@
 class Solution {
     public int longestCycle(int[] edges) {
-        int longestCycleLen = -1;
-        int timeStep = 1;
-        int[] nodeVisitedAtTime = new int[edges.length];
-
-        for (int currentNode = 0; currentNode < edges.length; ++currentNode) {
-            if (nodeVisitedAtTime[currentNode] > 0)
+        int len = edges.length;
+        
+        int[] visitedTime = new int[len];
+        int time = 1;
+        int res = -1;
+        for (int node = 0; node < len; node++) {
+            if (visitedTime[node] > 0)
                 continue;
-            final int startTime = timeStep;
-            int u = currentNode;
-            while (u != -1 && nodeVisitedAtTime[u] == 0) {
-                nodeVisitedAtTime[u] = timeStep++;
-                u = edges[u];
+            
+            int curNode = node;
+            final int startTime = time;
+            while (curNode != -1 && visitedTime[curNode] == 0) {
+                visitedTime[curNode] = time++;
+                curNode = edges[curNode];
             }
-            if (u != -1 && nodeVisitedAtTime[u] >= startTime)
-                longestCycleLen = Math.max(longestCycleLen, timeStep - nodeVisitedAtTime[u]);
+            
+            if (curNode != -1 && visitedTime[curNode] >= startTime)
+                res = Math.max(res, time - visitedTime[curNode]);
         }
 
-        return longestCycleLen;
+        return res;
     }
 }
