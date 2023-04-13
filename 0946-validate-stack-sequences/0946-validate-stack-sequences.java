@@ -16,12 +16,8 @@ class Solution {
             }
         }
         
-        System.out.println(stack);
-        System.out.println(popP);
         while (popP < len && !stack.isEmpty()) {
             int el = stack.pop();
-            System.out.println("el : " + el);
-            System.out.println("popped[popP] : " + popped[popP]);
             if (el != popped[popP])
                 return false;
             popP++;
