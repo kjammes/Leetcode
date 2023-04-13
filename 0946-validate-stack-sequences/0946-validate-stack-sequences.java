@@ -2,19 +2,27 @@ class Solution {
     public boolean validateStackSequences(int[] pushed, int[] popped) {
         Stack<Integer> stack = new Stack<>();
         int len = pushed.length;
-        int pointer = 0;
+        int pushP = 0, popP = 0;
         
-        for (int el: pushed) {
-            stack.push(el);
-            while ( 
-                !stack.isEmpty() && 
-                stack.peek() == popped[pointer]
-            ) {
+        while (pushP < len) {
+            stack.push(pushed[pushP++]);
+            
+            int el = stack.peek();
+            while (popP < len && el == popped[popP]) {
                 stack.pop();
-                pointer++;
+                popP++;
+                if (!stack.isEmpty())
+                    el = stack.peek();
             }
         }
         
-        return stack.isEmpty();
+        while (popP < len && !stack.isEmpty()) {
+            int el = stack.pop();
+            if (el != popped[popP])
+                return false;
+            popP++;
+        }
+        
+        return true;
     }
 }
