@@ -1,10 +1,10 @@
 class Solution {
     public int longestPalindromeSubseq(String s) {
         StringBuilder sb = new StringBuilder(s);
-        return lcs(s, sb.reverse().toString());
+        return lcs(s, sb.reverse());
     }
 
-    private int lcs(String s, String t) {
+    private int lcs(String s, StringBuilder t) {
         int len = s.length();
         int memo[][] = new int[len + 1][len + 1];
 
