@@ -1,15 +1,15 @@
 class Solution {
     public String mergeAlternately(String word1, String word2) {
-        int p1 = 0;
+        int idx = 0;
         StringBuilder res = new StringBuilder();
-        while (p1 < word1.length() && p1 < word2.length()) {
-            res.append(word1.charAt(p1));
-            res.append(word2.charAt(p1));
-            p1++;
+        while (idx < word1.length() && idx < word2.length()) {
+            res.append(word1.charAt(idx));
+            res.append(word2.charAt(idx));
+            idx++;
         }
         
-        while (p1 < word1.length()) { res.append(word1.charAt(p1++)); }
-        while (p1 < word2.length()) { res.append(word2.charAt(p1++)); }
+        while (idx < word1.length()) { res.append(word1.charAt(idx++)); }
+        while (idx < word2.length()) { res.append(word2.charAt(idx++)); }
         
         return res.toString();
     }
