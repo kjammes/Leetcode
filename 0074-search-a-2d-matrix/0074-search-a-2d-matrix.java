@@ -3,30 +3,24 @@ class Solution {
         int m = matrix.length;
         int n = matrix[0].length;
         
-        int[] flatmap = new int[m * n];
-        int pointer = 0;
-        for (int i = 0 ;i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                flatmap[pointer++] = matrix[i][j];
+        int row = 0;
+        while (row < m) {
+            int left = 0, right = n - 1;
+            while (left <= right) {
+                int mid = left + (right - left) / 2;
+                int midEl = matrix[row][mid];
+                
+                if (midEl == target) 
+                    return true;
+                
+                if (midEl < target)
+                    left = mid + 1;
+                else
+                    right = mid - 1;
             }
-        }
-        
-        boolean res = false;
-        int left = 0, right = pointer - 1;
-        
-        
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (flatmap[mid] == target) {
-                res = true;
-                break;
-            }
-            if (flatmap[mid] < target)
-                left = mid + 1;
-            else
-                right = mid - 1;
+            row++;
         }
             
-        return res;
+        return false;
     }
 }
