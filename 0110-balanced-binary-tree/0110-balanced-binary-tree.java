@@ -14,20 +14,26 @@
  * }
  */
 class Solution {
-    public boolean isBalanced(TreeNode root) {
-        if (root == null)
-            return true;
-        int lH = getHeight(root.left, 0);
-        int rH = getHeight(root.right, 0);
-        return (lH == rH || Math.abs(lH - rH) == 1) && isBalanced(root.right) && isBalanced(root.left); 
+    private static Pair<Boolean, Integer> dfs(TreeNode root) {
+        if (root == null) {
+            return new Pair<Boolean, Integer>(true, 0);
+        }
+
+        var left = dfs(root.left);
+        var right = dfs(root.right);
+
+        var balanced =
+            left.getKey() &&
+            right.getKey() &&
+            (Math.abs(left.getValue() - right.getValue()) <= 1);
+
+        return new Pair<Boolean, Integer>(
+            balanced,
+            1 + Math.max(left.getValue(), right.getValue())
+        );
     }
-    
-    private int getHeight(TreeNode node, int level) {
-        if (node == null)
-            return level;
-        level++;
-        int lH = getHeight(node.left, level);
-        int rH = getHeight(node.right, level);
-        return Math.max(lH, rH);
+
+    public static boolean isBalanced(TreeNode root) {
+        return dfs(root).getKey();
     }
 }
