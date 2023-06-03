@@ -1,33 +1,16 @@
 class Solution {
     public boolean isSubtree(TreeNode root, TreeNode subRoot) {
-        if (root == null && subRoot == null)
+        if (subRoot == null || isSameTree(root, subRoot))
             return true;
-        if (root == null || subRoot == null)
-            return false;
-        TreeNode subRootInRoot = getMatching(root, subRoot);
-        if (subRootInRoot == null)
-            return false;
-        return isSameTree(subRootInRoot, subRoot);
-    }
-
-    private TreeNode getMatching(TreeNode root, TreeNode subRoot) {
         if (root == null)
-            return null;
-        if (isSameTree(root, subRoot))
-            return root;
-        TreeNode found = getMatching(root.left, subRoot);
-        if (found == null) {
-            found = getMatching(root.right, subRoot);
-        }
-        return found;
+            return false;
+        return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
     }
 
     private boolean isSameTree(TreeNode root1, TreeNode root2) {
         if (root1 == null && root2 == null)
             return true;
-        if (root1 == null || root2 == null)
-            return false;
-        if (root1.val != root2.val)
+        if (root1 == null || root2 == null || root1.val != root2.val)
             return false;
         return isSameTree(root1.left, root2.left) && isSameTree(root1.right, root2.right);
     }
