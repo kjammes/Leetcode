@@ -15,21 +15,39 @@
  */
 class Solution {
     public int goodNodes(TreeNode root) {
-        return helper(root, Integer.MIN_VALUE, 0);
-    }
-    
-    private int helper(TreeNode root, int max, int res) {
-        if (root == null)
-            return res;
-        
-        if (root.val >= max) {
-            max = root.val;
-            res++;
+        if (root == null) {
+            return 0;
         }
         
-        res = helper(root.left, max, res);
-        res = helper(root.right, max, res);
+        Stack<TreeNode> nodeStack = new Stack<>();
+        Stack<Integer> maxStack = new Stack<>();
+        nodeStack.push(root);
+        maxStack.push(root.val);
         
-        return res;
-    } 
+        int count = 0;
+        
+        while (!nodeStack.empty()) {
+            TreeNode node = nodeStack.pop();
+            int maxVal = maxStack.pop();
+            
+            if (node.val >= maxVal) {
+                count++;
+                maxVal = node.val;
+            }
+            
+           
+            if (node.left != null) {
+                nodeStack.push(node.left);
+                maxStack.push(maxVal);
+            }
+            
+            if (node.right != null) {
+                nodeStack.push(node.right);
+                maxStack.push(maxVal);
+            }
+        }
+        
+        return count;
+    }
 }
+
