@@ -12,7 +12,6 @@ class Solution {
         for (int row = 0; row < m; row++) {
             for (int col = 0; col < n; col++) {
                 if (
-                    board[row][col] == word.charAt(0) &&
                     helper(board, word, row, col, 0, new boolean[m][n])
                 )
                     return true;
