@@ -1,52 +1,52 @@
-class Solution {
-//     public String longestPalindrome(String s) {
-//         int start = 0, end = 0;
-//         int longest = 0;
-        
-//         for (int i = 0; i < s.length(); i++) {
-//             int left = i - 1; 
-//             while (i < s.length() - 1 && s.charAt(i) == s.charAt(i + 1)) { i++; }
-            
-//             int right = i + 1;
-//             while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
-//                 left--; right++;
-//             }
-            
-//             if (right - left > longest) {
-//                 longest = right - left;
-//                 start = left + 1;
-//                 end = right;
-//             }
-//         }
-        
-//         return s.substring(start, end);
-//     }
+public class Solution {
     public String longestPalindrome(String s) {
-        int len = s.length();
-        int left = 0, right = 1, max = 0;
+        if (s == null || s.length() < 1) {
+            return "";
+        }
 
-        var isPalindrome = new boolean[len][len];
+        String processedString = preprocessString(s);
+        int n = processedString.length();
+        int[] palindromeLengths = new int[n];
+        int center = 0;
+        int right = 0;
+        int maxLen = 0;
+        int maxCenter = 0;
 
-        for (int i = len - 1; i >= 0; i--) {
-            for (int j = i; j < len; j++) {
-                if (i == j) {
-                    isPalindrome[i][j] = true;
-                } else if (s.charAt(i) == s.charAt(j)) {
-                    if (j - i == 1) {
-                        isPalindrome[i][j] = true;
-                    } else {
-                        isPalindrome[i][j] = isPalindrome[i + 1][j - 1];
-                    }
-                }
+        for (int i = 1; i < n - 1; i++) {
+            int mirror = 2 * center - i;
 
-                if (isPalindrome[i][j] && j - i + 1 > max) {
-                    max = j - i + 1;
-                    left = i;
-                    right = j + 1;
-                }
+            if (right > i) {
+                palindromeLengths[i] = Math.min(right - i, palindromeLengths[mirror]);
+            }
+
+            while (processedString.charAt(i + 1 + palindromeLengths[i]) == processedString.charAt(i - 1 - palindromeLengths[i])) {
+                palindromeLengths[i]++;
+            }
+
+            if (i + palindromeLengths[i] > right) {
+                center = i;
+                right = i + palindromeLengths[i];
+            }
+
+            if (palindromeLengths[i] > maxLen) {
+                maxLen = palindromeLengths[i];
+                maxCenter = i;
             }
         }
 
-        return s.substring(left, right);
+        int start = (maxCenter - maxLen) / 2;
+        int end = start + maxLen;
+
+        return s.substring(start, end);
+    }
+
+    private String preprocessString(String s) {
+        StringBuilder sb = new StringBuilder();
+        sb.append('^');
+        for (int i = 0; i < s.length(); i++) {
+            sb.append('#').append(s.charAt(i));
+        }
+        sb.append('#').append('$');
+        return sb.toString();
     }
 }
