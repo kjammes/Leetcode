@@ -14,26 +14,28 @@
  * }
  */
 class Solution {
+
+    Map<Integer, Integer> inorderPositions = new HashMap<>();
+
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        if (preorder.length == 0 || inorder.length == 0)
-            return null;
+        if (preorder.length < 1 || inorder.length < 1) return null;
 
-        int rootVal = preorder[0];
-        int idx = 0;
         for (int i = 0; i < inorder.length; i++) {
-            if (inorder[i] == rootVal)
-                idx = i;
+            inorderPositions.put(inorder[i], i);
         }
-        TreeNode root = new TreeNode(rootVal);
-        root.left = buildTree(
-            Arrays.copyOfRange(preorder, 1, idx + 1),
-            Arrays.copyOfRange(inorder, 0, idx)
-        );
-        root.right = buildTree(
-            Arrays.copyOfRange(preorder, idx + 1, preorder.length),
-            Arrays.copyOfRange(inorder, idx + 1, inorder.length)
-        );
 
+        return builder(preorder, 0, 0, inorder.length - 1);
+    }
+
+    private TreeNode builder(int[] preorder, int preorderIdx, int inorderStart, int inorderEnd) {
+        if (preorderIdx > preorder.length || inorderStart > inorderEnd)
+            return null;
+        int rootEl = preorder[preorderIdx];
+        int idx = inorderPositions.get(rootEl);
+        TreeNode root = new TreeNode(rootEl);
+        root.left = builder(preorder, preorderIdx + 1, inorderStart, idx - 1);
+        root.right = builder(preorder, preorderIdx + (idx - inorderStart) + 1, idx + 1, inorderEnd);
         return root;
     }
+    
 }
