@@ -1,40 +1,40 @@
 class Solution {
-    public boolean canFinish(int n, int[][] prerequisites) {
-        List<Integer>[] adj = new List[n];
-        int[] indegree = new int[n];
-        List<Integer> ans = new ArrayList<>();
-
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        List<Integer>[] adj = new List[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            adj[i] = new ArrayList<>();
+        }
         for (int[] pair : prerequisites) {
-            int course = pair[0];
-            int prerequisite = pair[1];
-            if (adj[course] == null) {
-                adj[course] = new ArrayList<>();
-            }
-            adj[course].add(prerequisite);
-            indegree[prerequisite]++;
+            adj[pair[0]].add(pair[1]);
         }
 
-        Queue<Integer> queue = new LinkedList<>();
-        for (int i = 0; i < n; i++) {
-            if (indegree[i] == 0) {
-                queue.offer(i);
+        boolean[] visited = new boolean[numCourses];
+        boolean[] recStack = new boolean[numCourses];
+
+        for (int i = 0; i < numCourses; i++) {
+            if (!visited[i] && hasCycle(i, adj, visited, recStack)) {
+                return false;
             }
         }
 
-        while (!queue.isEmpty()) {
-            int current = queue.poll();
-            ans.add(current);
+        return true;
+    }
 
-            if (adj[current] != null) {
-                for (int next : adj[current]) {
-                    indegree[next]--;
-                    if (indegree[next] == 0) {
-                        queue.offer(next);
-                    }
+    private boolean hasCycle(int node, List<Integer>[] adj, boolean[] visited, boolean[] recStack) {
+        visited[node] = true;
+        recStack[node] = true;
+
+        for (int neighbor : adj[node]) {
+            if (!visited[neighbor]) {
+                if (hasCycle(neighbor, adj, visited, recStack)) {
+                    return true;
                 }
+            } else if (recStack[neighbor]) {
+                return true;
             }
         }
 
-        return ans.size() == n;
+        recStack[node] = false;
+        return false;
     }
 }
