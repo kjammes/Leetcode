@@ -1,36 +1,38 @@
+import java.util.*;
+
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        List<Integer>[] adj = new ArrayList[numCourses];
-        for (int i = 0; i < numCourses; i++) { adj[i] = new ArrayList<>(); }
-        for (int[] el: prerequisites) {
-            adj[el[0]].add(el[1]);
-        }
-        
+        Map<Integer, List<Integer>> adj = new HashMap<>();
         int[] indegree = new int[numCourses];
-        for (int i = 0; i < numCourses; i++) {
-            for (int child: adj[i])
-                indegree[child]++;
+
+        for (int[] el : prerequisites) {
+            int course = el[0];
+            int prerequisite = el[1];
+            adj.putIfAbsent(prerequisite, new ArrayList<>());
+            adj.get(prerequisite).add(course);
+            indegree[course]++;
         }
-        
+
         Queue<Integer> q = new LinkedList<>();
         for (int i = 0; i < numCourses; i++) {
             if (indegree[i] == 0)
                 q.offer(i);
         }
-        
-        List<Integer> topo = new ArrayList<>();
+
+        int count = 0;
         while (!q.isEmpty()) {
             int node = q.poll();
-            topo.add(node);
-            
-            for (int child: adj[node]) {
-                indegree[child]--;
-                if (indegree[child] == 0)
-                    q.offer(child);
+            count++;
+
+            if (adj.containsKey(node)) {
+                for (int course : adj.get(node)) {
+                    indegree[course]--;
+                    if (indegree[course] == 0)
+                        q.offer(course);
+                }
             }
         }
-        
-        System.out.println("topo.size() : " + topo.size());
-        return topo.size() == numCourses;
+
+        return count == numCourses;
     }
 }
