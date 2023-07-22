@@ -7,11 +7,11 @@ class Solution {
         for (int[] pair : prerequisites) {
             int course = pair[0];
             int prerequisite = pair[1];
-            if (adj[prerequisite] == null) {
-                adj[prerequisite] = new ArrayList<>();
+            if (adj[course] == null) {
+                adj[course] = new ArrayList<>();
             }
-            adj[prerequisite].add(course);
-            indegree[course]++;
+            adj[course].add(prerequisite);
+            indegree[prerequisite]++;
         }
 
         Queue<Integer> queue = new LinkedList<>();
