@@ -1,57 +1,27 @@
 class Solution {
+
+    int[] parent;
+
     public int[] findRedundantConnection(int[][] edges) {
-        int n = edges.length;
-        UnionFind uf = new UnionFind(n);
+        parent = new int[edges.length];
+        for (int i = 0; i < edges.length; i++) parent[i] = i + 1;
 
         for (int[] edge : edges) {
-            int x = edge[0], y = edge[1];
-            if (uf.isConnected(x, y)) {
-                return edge;
-            }
-            uf.union(x, y);
+            if (find(edge[0]) == find(edge[1])) return edge; else union(
+                edge[0],
+                edge[1]
+            );
         }
 
-        return new int[0];
-    }
-}
-
-class UnionFind {
-    int[] parent;
-    int[] rank;
-
-    UnionFind(int n) {
-        parent = new int[n + 1];
-        rank = new int[n + 1];
-        for (int i = 0; i <= n; i++) {
-            parent[i] = i;
-        }
+        return new int[2];
     }
 
-    int find(int x) {
-        if (x != parent[x]) {
-            parent[x] = find(parent[x]);
-        }
-        return parent[x];
+    public int find(int x) {
+        if (x == parent[x - 1]) return x;
+        return find(parent[x - 1]);
     }
 
-    void union(int x, int y) {
-        int xRoot = find(x);
-        int yRoot = find(y);
-        if (xRoot == yRoot) {
-            return;
-        }
-
-        if (rank[xRoot] > rank[yRoot]) {
-            parent[yRoot] = xRoot;
-        } else if (rank[xRoot] < rank[yRoot]) {
-            parent[xRoot] = yRoot;
-        } else {
-            parent[yRoot] = xRoot;
-            rank[xRoot]++;
-        }
-    }
-
-    boolean isConnected(int x, int y) {
-        return find(x) == find(y);
+    public void union(int x, int y) {
+        parent[find(y) - 1] = find(x);
     }
 }
