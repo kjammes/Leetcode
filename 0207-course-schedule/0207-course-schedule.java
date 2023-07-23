@@ -9,32 +9,25 @@ class Solution {
         }
 
         boolean[] visited = new boolean[numCourses];
-        boolean[] recStack = new boolean[numCourses];
-
+        boolean[] stack = new boolean[numCourses];
         for (int i = 0; i < numCourses; i++) {
-            if (!visited[i] && hasCycle(i, adj, visited, recStack)) {
+            if (!visited[i] && hasCycle(i, adj, visited, stack)) {
                 return false;
             }
         }
-
         return true;
     }
 
-    private boolean hasCycle(int node, List<Integer>[] adj, boolean[] visited, boolean[] recStack) {
+    private boolean hasCycle(int node, List<Integer>[] adj, boolean[] visited, boolean[] stack) {
         visited[node] = true;
-        recStack[node] = true;
-
-        for (int neighbor : adj[node]) {
-            if (!visited[neighbor]) {
-                if (hasCycle(neighbor, adj, visited, recStack)) {
-                    return true;
-                }
-            } else if (recStack[neighbor]) {
+        stack[node] = true;
+        for (int n: adj[node]) {
+            if (!visited[n] && hasCycle(n, adj, visited, stack))
                 return true;
-            }
+            else if (stack[n])
+                return true;
         }
-
-        recStack[node] = false;
+        stack[node] = false;
         return false;
     }
 }
