@@ -5,9 +5,10 @@ class Solution {
 
         for (int[] edge : edges) {
             int x = edge[0], y = edge[1];
-            if (uf.find(x) == uf.find(y))
+            if (uf.isConnected(x, y)) {
                 return edge;
-            uf.merge(x, y);
+            }
+            uf.union(x, y);
         }
 
         return new int[0];
@@ -19,24 +20,27 @@ class UnionFind {
     int[] rank;
 
     UnionFind(int n) {
-        this.parent = new int[n + 1];
+        parent = new int[n + 1];
+        rank = new int[n + 1];
         for (int i = 0; i <= n; i++) {
-            this.parent[i] = i;
+            parent[i] = i;
         }
-        this.rank = new int[n + 1];
     }
 
     int find(int x) {
-        if (x == parent[x])
-            return x;
-        int xParent = find(parent[x]);
-        parent[x] = xParent;
-        return xParent;
+        if (x != parent[x]) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
     }
 
-    void merge(int x, int y) {
+    void union(int x, int y) {
         int xRoot = find(x);
         int yRoot = find(y);
+        if (xRoot == yRoot) {
+            return;
+        }
+
         if (rank[xRoot] > rank[yRoot]) {
             parent[yRoot] = xRoot;
         } else if (rank[xRoot] < rank[yRoot]) {
@@ -46,31 +50,8 @@ class UnionFind {
             rank[xRoot]++;
         }
     }
+
+    boolean isConnected(int x, int y) {
+        return find(x) == find(y);
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
