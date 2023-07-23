@@ -1,36 +1,76 @@
 class Solution {
     public int[] findRedundantConnection(int[][] edges) {
         int n = edges.length;
-        List<Integer>[] adj = new List[n + 1];
-        for (int i = 1; i <= n; i++) {
-            adj[i] = new ArrayList<>();
-        }
+        UnionFind uf = new UnionFind(n);
 
         for (int[] edge : edges) {
-            int u = edge[0];
-            int v = edge[1];
-            if (hasCycle(u, v, adj, new boolean[n + 1])) {
+            int x = edge[0], y = edge[1];
+            if (uf.find(x) == uf.find(y))
                 return edge;
-            }
-            adj[u].add(v);
-            adj[v].add(u);
+            uf.merge(x, y);
         }
 
         return new int[0];
     }
+}
 
-    private boolean hasCycle(int u, int v, List<Integer>[] adj, boolean[] visited) {
-        if (u == v) {
-            return true;
+class UnionFind {
+    int[] parent;
+    int[] rank;
+
+    UnionFind(int n) {
+        this.parent = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            this.parent[i] = i;
         }
-        visited[u] = true;
-        for (int neighbor : adj[u]) {
-            if (!visited[neighbor]) {
-                if (hasCycle(neighbor, v, adj, visited)) {
-                    return true;
-                }
-            }
+        this.rank = new int[n + 1];
+    }
+
+    int find(int x) {
+        if (x == parent[x])
+            return x;
+        int xParent = find(parent[x]);
+        parent[x] = xParent;
+        return xParent;
+    }
+
+    void merge(int x, int y) {
+        int xRoot = find(x);
+        int yRoot = find(y);
+        if (rank[xRoot] > rank[yRoot]) {
+            parent[yRoot] = xRoot;
+        } else if (rank[xRoot] < rank[yRoot]) {
+            parent[xRoot] = yRoot;
+        } else {
+            parent[yRoot] = xRoot;
+            rank[xRoot]++;
         }
-        return false;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
