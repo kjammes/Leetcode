@@ -7,6 +7,11 @@ class Solution {
         for (int i = 0; i < n; i++) {
             sumTotal += nums[i];
         }
+        
+        // If the target is greater than the sumTotal, it is not possible to achieve the target
+        if (target > sumTotal) {
+            return 0;
+        }
 
         // Calculate the new target value based on the sumTotal and target value
         int newTarget = target + sumTotal;
@@ -25,11 +30,6 @@ class Solution {
         // Initialize the DP array with -1 for all values
         for (int i = 0; i <= n; i++) {
             Arrays.fill(dp[i], -1);
-        }
-
-        // If the target is greater than the sumTotal, it is not possible to achieve the target
-        if (target > sumTotal) {
-            return 0;
         }
 
         // If there is only one element in the array, check if it can achieve the target
