@@ -61,7 +61,7 @@ class Solution {
                     }
                 }
                 if (indegree[x][y] == 0) {
-                    queue.add(new int[]{x, y});
+                    queue.offer(new int[]{x, y});
                 }
             }
         }
@@ -80,7 +80,7 @@ class Solution {
                         if (matrix[nx][ny] > matrix[x][y]) {
                             indegree[nx][ny]--;
                             if (indegree[nx][ny] == 0) {
-                                queue.add(new int[]{nx, ny});
+                                queue.offer(new int[]{nx, ny});
                             }
                         }
                     }
