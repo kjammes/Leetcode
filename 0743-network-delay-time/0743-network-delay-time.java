@@ -5,19 +5,15 @@ class Solution {
         paths[k - 1] = 0;
 
         for (int i = 0; i < n; i++) {
-            int[] temp = Arrays.copyOf(paths, n);
-
             for (int[] time : times) {
                 int src = time[0] - 1; // Adjust for 0-based index
                 int tgt = time[1] - 1; // Adjust for 0-based index
                 int travelTime = time[2];
 
-                if (temp[src] != Integer.MAX_VALUE && temp[src] + travelTime < temp[tgt]) {
-                    temp[tgt] = temp[src] + travelTime;
+                if (paths[src] != Integer.MAX_VALUE && paths[src] + travelTime < paths[tgt]) {
+                    paths[tgt] = paths[src] + travelTime;
                 }
             }
-
-            paths = temp;
         }
 
         int result = -1;
