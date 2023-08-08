@@ -1,30 +1,25 @@
 class Solution {
     public int networkDelayTime(int[][] times, int n, int k) {
-        int[] paths = new int[n];
-        Arrays.fill(paths, Integer.MAX_VALUE);
-        paths[k - 1] = 0;
-
-        for (int i = 0; i < n; i++) {
-            for (int[] time : times) {
-                int src = time[0] - 1; // Adjust for 0-based index
-                int tgt = time[1] - 1; // Adjust for 0-based index
-                int travelTime = time[2];
-
-                if (paths[src] != Integer.MAX_VALUE && paths[src] + travelTime < paths[tgt]) {
-                    paths[tgt] = paths[src] + travelTime;
-                }
+        int[] dist = new int[n+1];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[k] = 0;
+        
+        for (int i = 1; i < n; i++) {
+            for (int el[]: times) {
+                int src = el[0], dest = el[1], time = el[2];
+                if (dist[src] != Integer.MAX_VALUE && dist[src] + time < dist[dest]) 
+                    dist[dest] = dist[src] + time;
             }
         }
-
-        int result = -1;
-
-        for (int path : paths) {
-            if (path == Integer.MAX_VALUE) {
+        
+        int res = -1;
+        for (int i = 1; i <= n; i++) {
+            int d = dist[i];
+            if (d == Integer.MAX_VALUE)
                 return -1;
-            }
-            result = Math.max(result, path);
+            res = Math.max(res, d);
         }
-
-        return result;
+        
+        return res;
     }
 }
