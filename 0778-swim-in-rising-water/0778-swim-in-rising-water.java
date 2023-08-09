@@ -1,42 +1,44 @@
-class Node {
-    int r, c, val;
-    Node(int r, int c, int val) {
-        this.r = r;
-        this.c = c;
-        this.val = val;
-    }
-}
-
 class Solution {
+    
+    int[][] dirs = {
+        {0, 1}, {0, -1}, {-1, 0}, {1, 0}
+    };
+    
     public int swimInWater(int[][] grid) {
-        int[][] dirs = {
-            {0, 1}, {0, -1}, {-1, 0}, {1, 0}
-        };
+        int n = grid.length;
+    
+        int low = 0, high = n * n - 1;        
+        while (low < high) {
+            
+            int mid = low + (high - low) / 2;
+            boolean[][] visited = new boolean[n][n];
+            
+            if (dfs(0, 0, grid, mid, visited)) {
+                high = mid;
+            } else
+                low = mid + 1;
+        }
         
+        return low;
+    }
+    
+    private boolean dfs(int r, int c, int[][] grid, int target, boolean[][] visited) {
         int n = grid.length;
         
-        PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> Integer.compare(a.val, b.val));
-        pq.offer(new Node(0, 0, grid[0][0]));
+        if ( r < 0 || c < 0 || r >= n || c >= n || visited[r][c] || grid[r][c] > target)
+            return false;
         
-        boolean[][] visited = new boolean[n][n];
+        visited[r][c] = true;
         
-        int res = 0;
-        while (!pq.isEmpty()) {
-            int row = pq.peek().r, col = pq.peek().c, val = pq.poll().val;
-            
-            if (visited[row][col])
-                continue;
-            visited[row][col] = true;
-            
-            res = Math.max(res, val);
-            if (row == n - 1 && col == n - 1)
+        if (r == n - 1 && c == n - 1)
+            return true;
+        
+        boolean res = false;
+        for (int dir[]: dirs) {
+            int x = r + dir[0], y = c + dir[1];
+            if (dfs(x, y, grid, target, visited)) {
+                res = true;
                 break;
-            
-            for (int dir[]: dirs) {
-                int x = row + dir[0], y = col + dir[1];
-                if (x >= 0 && y >= 0 && x < n && y < n && !visited[x][y]) {
-                    pq.offer(new Node(x, y, grid[x][y]));
-                }
             }
         }
         
