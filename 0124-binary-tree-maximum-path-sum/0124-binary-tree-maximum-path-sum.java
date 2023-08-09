@@ -22,17 +22,17 @@ class Solution {
         return maxPath;
     }
     
-    private int getMaxGain(TreeNode node) {
-        if (node == null) {
+    private int getMaxGain(TreeNode root) {
+        if (root == null)
             return 0;
-        }
         
-        int gainOnLeft = Math.max(getMaxGain(node.left), 0); // Read the part important observations
-        int gainOnRight = Math.max(getMaxGain(node.right), 0); // Read the part important observations
+        int leftMaxGain = Math.max(getMaxGain(root.left), 0);
+        int rightMaxGain = Math.max(getMaxGain(root.right), 0);
         
-        int currentMaxPath = node.val + gainOnLeft + gainOnRight; // Read first three images of going down the recursion stack
-        maxPath = Math.max(maxPath, currentMaxPath); // Read first three images of going down the recursion stack
+        int curPathSum = root.val + leftMaxGain + rightMaxGain;
         
-        return node.val + Math.max(gainOnLeft, gainOnRight); // Read the last image of going down the recursion stack
+        maxPath = Math.max(maxPath, curPathSum);
+        
+        return root.val + Math.max(leftMaxGain, rightMaxGain);
     }
 }
