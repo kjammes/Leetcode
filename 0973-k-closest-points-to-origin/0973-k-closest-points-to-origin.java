@@ -1,36 +1,43 @@
-class Pair {
-    int[] coors;
-    double distance;
-    
-    Pair(int[] coors, double distance) {
-        this.coors = coors;
-        this.distance = distance;
-    }
-}
-
 class Solution {
-    public int[][] kClosest(int[][] points, int k) {
-        PriorityQueue<Pair> pq = new PriorityQueue<>(k, (a, b) -> Double.compare(b.distance, a.distance));
+    public int[][] kClosest(int[][] points, int K) {
+        int left = 0, right = points.length - 1;
         
-        for (int point[]: points) {
-            double eDist = Math.sqrt(
-                Math.pow(0 - point[0], 2) +
-                Math.pow(0 - point[1], 2)
-            );
-            if (pq.size() < k) {
-                pq.offer(new Pair(new int[] {point[0], point[1]}, eDist));
-            } else if (pq.peek().distance > eDist) {
-                pq.poll();
-                pq.offer(new Pair(new int[] {point[0], point[1]}, eDist));
-            }
+        while (left <= right) {
+            int pivotIndex = partition(points, left, right);
             
+            if (pivotIndex == K) {
+                break;
+            } else if (pivotIndex < K) {
+                left = pivotIndex + 1;
+            } else {
+                right = pivotIndex - 1;
+            }
         }
         
-        int[][] res = new int[k][2];
-        for (int i = 0; i < k; i++) {
-            res[i] = pq.poll().coors;
+        return Arrays.copyOfRange(points, 0, K);
+    }
+    
+    private int partition(int[][] points, int left, int right) {
+        int[] pivot = points[left];
+        
+        while (left < right) {
+            while (left < right && compare(points[right], pivot) >= 0) {
+                right--;
+            }
+            points[left] = points[right];
+            
+            while (left < right && compare(points[left], pivot) <= 0) {
+                left++;
+            }
+            points[right] = points[left];
         }
         
-        return res;
+        points[left] = pivot;
+        return left;
+    }
+    
+    private int compare(int[] point1, int[] point2) {
+        return point1[0] * point1[0] + point1[1] * point1[1] -
+               point2[0] * point2[0] - point2[1] * point2[1];
     }
 }
