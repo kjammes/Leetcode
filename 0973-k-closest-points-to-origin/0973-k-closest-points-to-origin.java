@@ -1,31 +1,43 @@
 class Solution {
     public int[][] kClosest(int[][] points, int K) {
-    int len =  points.length, l = 0, r = len - 1;
-    while (l <= r) {
-        int mid = helper(points, l, r);
-        if (mid == K) break;
-        if (mid < K) {
-            l = mid + 1;
-        } else {
-            r = mid - 1;
+        int left = 0, right = points.length - 1;
+        
+        while (left <= right) {
+            int pivotIndex = partition(points, left, right);
+            
+            if (pivotIndex == K) {
+                break;
+            } else if (pivotIndex < K) {
+                left = pivotIndex + 1;
+            } else {
+                right = pivotIndex - 1;
+            }
         }
+        
+        return Arrays.copyOfRange(points, 0, K);
     }
-    return Arrays.copyOfRange(points, 0, K);
-}
-
-private int helper(int[][] A, int l, int r) {
-    int[] pivot = A[l];
-    while (l < r) {
-        while (l < r && compare(A[r], pivot) >= 0) r--;
-        A[l] = A[r];
-        while (l < r && compare(A[l], pivot) <= 0) l++;
-        A[r] = A[l];
+    
+    private int partition(int[][] points, int left, int right) {
+        int[] pivot = points[left];
+        
+        while (left < right) {
+            while (left < right && compare(points[right], pivot) >= 0) {
+                right--;
+            } 
+            points[left] = points[right];
+            
+            while (left < right && compare(points[left], pivot) <= 0) {
+                left++;
+            }
+            points[right] = points[left];
+        }
+        
+        points[left] = pivot;
+        return left;
     }
-    A[l] = pivot;
-    return l;
-}
-
-private int compare(int[] p1, int[] p2) {
-    return p1[0] * p1[0] + p1[1] * p1[1] - p2[0] * p2[0] - p2[1] * p2[1];
-}
+    
+    private int compare(int[] point1, int[] point2) {
+        return point1[0] * point1[0] + point1[1] * point1[1] -
+               point2[0] * point2[0] - point2[1] * point2[1];
+    }
 }
