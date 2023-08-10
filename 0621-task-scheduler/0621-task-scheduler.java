@@ -1,20 +1,30 @@
 class Solution {
     public int leastInterval(char[] tasks, int n) {
-        int[] freqs = new int[26];
-        for (char el: tasks) 
-            freqs[el - 'A']++;
+        int[] freq = new int[26];
+        for (char el: tasks)
+            freq[el - 'A']++;
+
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
+        for(int f: freq)
+            if (f != 0) pq.offer(f);
         
-        Arrays.sort(freqs); // Sort frequencies in ascending order
+        Queue<int[]> q = new LinkedList<>();
         
-        int maxFreq = freqs[25];
-        int idleSlots = (maxFreq - 1) * n;
-        
-        for (int i = 24; i >= 0 && freqs[i] > 0; i--) {
-            idleSlots -= Math.min(maxFreq - 1, freqs[i]);
+        int time = 0;
+        while (!pq.isEmpty() || !q.isEmpty()) {
+            time++;
+            
+            if (!pq.isEmpty()) {
+                int newFreq = pq.poll() - 1;
+                if (newFreq != 0)
+                    q.offer(new int[] {newFreq, time + n});
+            }
+            
+            if (!q.isEmpty() && time == q.peek()[1]) {
+                pq.offer(q.poll()[0]);
+            }
         }
         
-        idleSlots = Math.max(0, idleSlots); // Idle slots can't be negative
-        
-        return tasks.length + idleSlots;
+        return time;
     }
 }
