@@ -10,58 +10,72 @@ class TrieNode {
 
 class Solution {
     public List<String> findWords(char[][] board, String[] words) {
-        TrieNode root = buildTrie(words);
+        TrieNode root = buildTree(words);
+        int m = board.length, n = board[0].length;
+        
         List<String> result = new ArrayList<>();
         
-        int m = board.length;
-        int n = board[0].length;
-        
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                dfs(board, i, j, root, result);
+        for (int r = 0; r < m; r++) {
+            for (int c = 0; c < n; c++) {
+                dfs(root, r, c, result, board);
             }
         }
         
         return result;
     }
     
-    private TrieNode buildTrie(String[] words) {
+    private TrieNode buildTree(String[] words) {
         TrieNode root = new TrieNode();
-        for (String word : words) {
+        for (String word: words) {
             TrieNode node = root;
-            for (char c : word.toCharArray()) {
-                if (node.children[c - 'a'] == null) {
-                    node.children[c - 'a'] = new TrieNode();
-                }
-                node = node.children[c - 'a'];
+            for (char el: word.toCharArray()) {
+                if (node.children[el - 'a'] == null)
+                    node.children[el - 'a'] = new TrieNode();
+                node = node.children[el - 'a'];
             }
             node.word = word;
         }
         return root;
     }
     
-    private void dfs(char[][] board, int i, int j, TrieNode node, List<String> result) {
-        if (i < 0 || j < 0 || i >= board.length || j >= board[0].length || board[i][j] == '#')
+    private void dfs(TrieNode node, int r, int c, List<String> result, char[][] board) {
+        if (r < 0 || r >= board.length || c < 0 || c >= board[0].length || board[r][c] == '#')
             return;
         
-        char c = board[i][j];
-        TrieNode nextNode = node.children[c - 'a'];
-        
+        char ch = board[r][c];
+        TrieNode nextNode = node.children[ch - 'a'];
         if (nextNode == null)
             return;
         
         if (nextNode.word != null) {
             result.add(nextNode.word);
-            nextNode.word = null; // Avoid duplicates
+            nextNode.word = null;
         }
         
-        board[i][j] = '#'; // Mark the cell as visited
+        board[r][c] = '#';
         
-        dfs(board, i - 1, j, nextNode, result);
-        dfs(board, i + 1, j, nextNode, result);
-        dfs(board, i, j - 1, nextNode, result);
-        dfs(board, i, j + 1, nextNode, result);
+        dfs(nextNode, r + 1, c, result, board);
+        dfs(nextNode, r - 1, c, result, board);
+        dfs(nextNode, r, c + 1, result, board);
+        dfs(nextNode, r, c - 1, result, board);
         
-        board[i][j] = c; // Backtrack
+        board[r][c] = ch;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
