@@ -1,34 +1,36 @@
 class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        List<Integer>[] adj = new List[numCourses];
-        for (int i = 0; i < numCourses; i++) { adj[i] = new ArrayList<>(); }
+        
+        List<Integer>[] graph = new List[numCourses];
+        for (int i = 0; i < numCourses; i++)
+            graph[i] = new ArrayList<>();
+        
         int[] indegree = new int[numCourses];
-        for (int i = 0; i < prerequisites.length; i++) {
-            int prerequisite = prerequisites[i][1];
-            int course = prerequisites[i][0];
-
-            adj[prerequisite].add(course);
+        for (int[] preq: prerequisites) {
+            int pre = preq[1];
+            int course = preq[0];
+            graph[pre].add(course);
             indegree[course]++;
         }
         
         Queue<Integer> q = new LinkedList<>();
-        for (int i = 0; i < numCourses; i++) {
-            if (indegree[i] == 0)
-                q.offer(i);
+        for (int node = 0; node < numCourses; node++) {
+            if (indegree[node] == 0)
+                q.offer(node);
         }
         
-        List<Integer> topo = new ArrayList<>();
+        int cnt = 0;
+        int[] result = new int[numCourses];
         while (!q.isEmpty()) {
             int node = q.poll();
-            topo.add(node);
-            for (int n: adj[node]) {
-                indegree[n]--;
-                if (indegree[n] == 0)
-                    q.offer(n);
+            result[cnt++] = node;
+            
+            for (int ng: graph[node]) {
+                indegree[ng]--;
+                if (indegree[ng] == 0)
+                    q.offer(ng);
             }
         }
-        
-        return topo.size() == numCourses ? 
-            topo.stream().mapToInt(Integer::intValue).toArray() : new int[] {};
+        return cnt == numCourses ? result : new int[] {};
     }
 }
