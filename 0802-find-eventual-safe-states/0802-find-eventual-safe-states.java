@@ -1,38 +1,38 @@
 class Solution {
     public List<Integer> eventualSafeNodes(int[][] graph) {
         int V = graph.length;
+
+        List<Integer>[] reverseGraph = new ArrayList[V];
+        for (int i = 0; i < V; i++) {
+            reverseGraph[i] = new ArrayList<>();
+        }
         
-        boolean[] visited = new boolean[V];
-        boolean[] pathVisited = new boolean[V];
-        boolean[] check = new boolean[V];
+        int[] outdegree = new int[V];
         for (int node = 0; node < V; node++) {
-            if (visited[node])
-                continue;
-            dfs(graph, node, visited, pathVisited, check);
+            for (int ng : graph[node]) {
+                reverseGraph[ng].add(node); // Reverse the direction of edges
+                outdegree[node]++; // Increment outdegree of the current node
+            }
+        }
+        
+        Queue<Integer> q = new LinkedList<>();
+        for (int node = 0; node < V; node++) {
+            if (outdegree[node] == 0)
+                q.offer(node);
         }
         
         List<Integer> result = new ArrayList<>();
-        for (int node = 0; node < V; node++) {
-            if (check[node])
-                result.add(node);
+        while (!q.isEmpty()) {
+            int node = q.poll();
+            result.add(node);
+            
+            for (int ng : reverseGraph[node]) {
+                outdegree[ng]--; // Decrement outdegree of the neighbor
+                if (outdegree[ng] == 0)
+                    q.offer(ng);
+            }
         }
+        Collections.sort(result);
         return result;
-    }
-    
-    private boolean dfs(int[][] graph, int node, boolean[] visited, boolean[] pathVisited, boolean[] check) {
-        visited[node] = true;
-        pathVisited[node] = true;
-        
-        for (int ng: graph[node]) {
-            if (!visited[ng] && dfs(graph, ng, visited, pathVisited, check))
-                return true;
-            else if (pathVisited[ng])
-                return true;
-        }
-        
-        check[node] = true;
-        pathVisited[node] = false;
-        
-        return false;
     }
 }
