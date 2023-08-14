@@ -1,33 +1,35 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        List<Integer>[] adj = new List[numCourses];
-        for (int i = 0; i < numCourses; i++) {
-            adj[i] = new ArrayList<>();
+        
+        List<Integer>[] graph = new List[numCourses];
+        for (int i = 0; i < numCourses; i++)
+            graph[i] = new ArrayList<>();
+        
+        int[] indegree = new int[numCourses];
+        for (int[] preq: prerequisites) {
+            int pre = preq[1];
+            int course = preq[0];
+            graph[pre].add(course);
+            indegree[course]++;
         }
-        for (int[] pair : prerequisites) {
-            adj[pair[0]].add(pair[1]);
+        
+        Queue<Integer> q = new LinkedList<>();
+        for (int node = 0; node < numCourses; node++) {
+            if (indegree[node] == 0)
+                q.offer(node);
         }
-
-        boolean[] visited = new boolean[numCourses];
-        boolean[] stack = new boolean[numCourses];
-        for (int i = 0; i < numCourses; i++) {
-            if (!visited[i] && hasCycle(i, adj, visited, stack)) {
-                return false;
+        
+        int cnt = 0;
+        while (!q.isEmpty()) {
+            int node = q.poll();
+            cnt++;
+            
+            for (int ng: graph[node]) {
+                indegree[ng]--;
+                if (indegree[ng] == 0)
+                    q.offer(ng);
             }
         }
-        return true;
-    }
-
-    private boolean hasCycle(int node, List<Integer>[] adj, boolean[] visited, boolean[] stack) {
-        visited[node] = true;
-        stack[node] = true;
-        for (int n: adj[node]) {
-            if (!visited[n] && hasCycle(n, adj, visited, stack))
-                return true;
-            else if (stack[n])
-                return true;
-        }
-        stack[node] = false;
-        return false;
+        return cnt == numCourses;
     }
 }
