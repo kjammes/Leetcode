@@ -3,23 +3,33 @@ class Solution {
         int n = graph.length;
         int[] colors = new int[n];
         for (int i = 0; i < n; i++) {
-            if (!dfs(graph, i, colors, 1))
+            if (!bfs(graph, i, colors))
                 return false;
         }
         return true;
     }
     
-    private boolean dfs(int[][] graph, int node, int[] colors, int color) {
+    private boolean bfs(int[][] graph, int node, int[] colors) {
         if (colors[node] != 0)
             return true;
         
-        colors[node] = color;
-        for (int ng: graph[node]) {
-            if (colors[ng] == color)
-                return false;
-            if (!dfs(graph, ng, colors, -color))
-                return false;
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(node);
+        colors[node] = 1;
+        
+        while (!q.isEmpty()) {
+            int curNode = q.poll();
+            
+            for (int ng: graph[curNode]) {
+                
+                if (colors[ng] == 0) {
+                    colors[ng] = -colors[curNode];
+                    q.offer(ng);
+                } else if (colors[ng] == colors[curNode])
+                    return false;
+            }
         }
+        
         return true;
     }
 }
