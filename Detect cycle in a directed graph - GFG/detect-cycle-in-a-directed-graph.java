@@ -35,34 +35,31 @@ class Solution {
     // Function to detect cycle in a directed graph.
     public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
         // code here
-        boolean[] visited = new boolean[V];
-        boolean[] pathVisited = new boolean[V];
-        
+        int[] indegree = new int[V];
         for (int node = 0; node < V; node++) {
-            if (!visited[node] && hasCycle(node, adj, visited, pathVisited)) {
-                return true;
+            for (int ng: adj.get(node)) {
+                indegree[ng]++;
             }
         }
         
-        return false;
-    }
-    
-    private boolean hasCycle(
-            int node, 
-            ArrayList<ArrayList<Integer>> adj,
-            boolean[] visited, 
-            boolean[] pathVisited
-        ) {
-        visited[node] = true;
-        pathVisited[node] = true;
-        
-        for (int ng: adj.get(node)) {
-            if (!visited[ng] && hasCycle(ng, adj, visited, pathVisited))
-                return true;
-            else if (pathVisited[ng])
-                return true;
+        Queue<Integer> q = new LinkedList<>();
+        for (int node = 0; node < V; node++) {
+            if (indegree[node] == 0)
+                q.offer(node);
         }
-        pathVisited[node] = false;
-        return false;
+        
+        int count = 0;
+        while (!q.isEmpty()) {
+            int node = q.poll();
+            count++;
+            
+            for (int ng: adj.get(node)) {
+                indegree[ng]--;
+                if (indegree[ng] == 0)
+                    q.offer(ng);
+            }
+        }
+        
+        return count != V;
     }
 }
