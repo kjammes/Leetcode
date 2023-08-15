@@ -42,22 +42,22 @@ class Solution {
             int[] edge = edges[i];
             graph[edge[0]].add(new Node(edge[1], edge[2]));
         }
-
-        PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> Integer.compare(a.dist, b.dist));
-        pq.offer(new Node(0, 0));
+        
+        Stack<Integer> stack = new Stack<>();
+        boolean[] vis = new boolean[N];
+        topoSort(0, graph, vis, stack);
+        
         res[0] = 0;
-
-        while (!pq.isEmpty()) {
-            Node node = pq.poll();
-
-            for (Node ng : graph[node.val]) {
-                if (node.dist + ng.dist < res[ng.val]) {
-                    res[ng.val] = node.dist + ng.dist;
-                    pq.offer(new Node(ng.val, node.dist + ng.dist));
+        while (!stack.empty()) {
+            int node = stack.pop();
+        
+            for (Node ng : graph[node]) {
+                if (ng.dist + res[node] < res[ng.val]) {
+                    res[ng.val] = ng.dist + res[node]; 
                 }
             }
         }
-
+        
         for (int i = 0; i < N; i++) {
             if (res[i] == (int) 1e6)
                 res[i] = -1;
@@ -65,6 +65,21 @@ class Solution {
 
         return res;
     }
+    
+    private void topoSort(int node, List<Node>[] adj,
+      boolean vis[], Stack < Integer > st) {
+    
+      vis[node] = true;
+      for (Node ng: adj[node]) {
+        int v = ng.val;
+        if (!vis[v]) {
+          topoSort(v, adj, vis, st);
+        }
+      }
+      
+      st.add(node);
+    }
+
 }
 
 class Node {
