@@ -32,46 +32,46 @@ class GFG {
 
 
 // User function Template for Java
-
 class Solution {
-    
-    int MOD_LIMIT = 100000;
-    
     int minimumMultiplications(int[] arr, int start, int end) {
 
         // Your code here
-        Queue<Node> q = new LinkedList<>();
-        q.offer(new Node(start, 0));
-        int[] dist = new int[MOD_LIMIT];
-        Arrays.fill(dist, (int) 10e8);
+        final int MOD = 100000;
+        
+        int[] dist = new int[100000];
+        Arrays.fill(dist, Integer.MAX_VALUE);
         dist[start] = 0;
         
+        Queue<Pair> q = new LinkedList<>();
+        q.offer(new Pair(start, 0));
+        
         while (!q.isEmpty()) {
-            Node node = q.poll();
-            int num = node.num;
-            int dis = node.dist;
-            
+            Pair top = q.poll();
+            int val = top.val;
+            int steps = top.steps;
+                
             for (int el: arr) {
-                int newNum = (num * el) % MOD_LIMIT;
-                if (dis + 1 < dist[newNum]) {
-                    dist[newNum] = dis + 1;
-                    if (newNum == end)
-                        return dis + 1;
-                    q.offer(new Node(newNum, dis + 1));
+                int newVal = (val * el) % MOD;
+                if (1 + steps < dist[newVal]) {
+                    dist[newVal] = 1 + steps;
+                    if (newVal == end)
+                        return dist[newVal];
+                    q.offer(new Pair(newVal, steps + 1));
                 }
+                
             }
         }
         
-        return dist[end] == (int) 10e8 ? -1 : dist[end];
+        return dist[end] == Integer.MAX_VALUE ? -1 : dist[end];
     }
 }
 
-class Node {
-    int num;
-    int dist;
+class Pair {
+    int val;
+    int steps;
     
-    Node(int num, int dist) {
-        this.num = num;
-        this.dist = dist;
+    Pair(int val, int steps) {
+        this.val = val;
+        this.steps = steps;
     }
 }
