@@ -10,7 +10,6 @@ class Solution {
         }
 
         DisjointSet ds = new DisjointSet(maxRow + maxCol + 2);
-        // HashMap<Integer, Integer> stoneNodes = new HashMap<>();
         Set<Integer> set = new HashSet<>();
 
         for (int i = 0; i < n; i++) {
@@ -22,11 +21,6 @@ class Solution {
         }
 
         int cnt = 0;
-        // for (Map.Entry<Integer, Integer> entry : stoneNodes.entrySet()) {
-        //     if (ds.findUPar(entry.getKey()) == entry.getKey()) {
-        //         cnt++;
-        //     }
-        // }
         for (int el: set) {
              if (ds.findUPar(el) == el) {
                 cnt++;
