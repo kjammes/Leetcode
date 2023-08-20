@@ -10,19 +10,25 @@ class Solution {
         }
 
         DisjointSet ds = new DisjointSet(maxRow + maxCol + 2);
-        HashMap<Integer, Integer> stoneNodes = new HashMap<>();
+        // HashMap<Integer, Integer> stoneNodes = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
 
         for (int i = 0; i < n; i++) {
             int nodeRow = stones[i][0];
             int nodeCol = stones[i][1] + maxRow + 1;
             ds.unionBySize(nodeRow, nodeCol);
-            stoneNodes.put(nodeRow, 1);
-            stoneNodes.put(nodeCol, 1);
+            set.add(nodeRow);
+            set.add(nodeCol);
         }
 
         int cnt = 0;
-        for (Map.Entry<Integer, Integer> entry : stoneNodes.entrySet()) {
-            if (ds.findUPar(entry.getKey()) == entry.getKey()) {
+        // for (Map.Entry<Integer, Integer> entry : stoneNodes.entrySet()) {
+        //     if (ds.findUPar(entry.getKey()) == entry.getKey()) {
+        //         cnt++;
+        //     }
+        // }
+        for (int el: set) {
+             if (ds.findUPar(el) == el) {
                 cnt++;
             }
         }
