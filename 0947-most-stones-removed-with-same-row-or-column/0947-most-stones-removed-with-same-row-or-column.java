@@ -9,7 +9,7 @@ class Solution {
             maxCol = Math.max(maxCol, stones[i][1]);
         }
 
-        DisjointSet ds = new DisjointSet(20001);
+        DisjointSet ds = new DisjointSet(maxRow + maxCol + 2);
         HashMap<Integer, Integer> stoneNodes = new HashMap<>();
 
         for (int i = 0; i < n; i++) {
