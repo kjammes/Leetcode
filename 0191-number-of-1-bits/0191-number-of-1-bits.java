@@ -4,7 +4,7 @@ public class Solution {
         int res = 0;
         final int MASK = 1;
         for (int i = 0; i < 32; i++) {
-            if ((n & MASK) != 0)
+            if ((n & MASK) == 1)
                 res++;
             n >>= 1;
         }
